@@ -35,6 +35,7 @@
     (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
   (move-end-of-line 2))
 
+;;;###autoload
 (defun pdf-meta-edit-label-section ()
   "Insert bookmark metadata section."
   (interactive)
