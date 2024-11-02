@@ -27,6 +27,14 @@
 
 ;;; Code:
 
+;;; Options
+
+;;; Variables
+
+;;; Constants
+
+;;; Functions
+
 ;;;###autoload
 (defun pdf-meta-edit-bookmark-section ()
   "Insert bookmark metadata section."
@@ -55,15 +63,21 @@
               "PageLabelStart: 1\n"
               "PageLabelNumStyle: " style))))
 
+;;; Keymap
+
 (defvar-keymap pdf-meta-edit-mode-map
   :doc "Mode map for `pdf-meta-edit-mode'."
   "C-c C-b" #'pdf-meta-edit-bookmark-section
   "C-c C-l" #'pdf-meta-edit-label-section)
 
+;;; Major mode
+
 (define-derived-mode pdf-meta-edit-mode fundamental-mode "Metadata"
   "Major mode for altering and viewing PDF metadata."
   :interactive t
   (use-local-map pdf-meta-edit-mode-map))
+
+;;; Commands
 
 ;;;###autoload
 (defun pdf-meta-edit-modify (pdf-file)
