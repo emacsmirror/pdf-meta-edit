@@ -71,10 +71,40 @@
   "C-c C-l" #'pdf-meta-edit-label-section)
 
 ;;; Major mode
+;;;; Font-locking
 
+(defvar pdf-meta-edit-mode-font-lock-keywords
+  `((,(rx (or (seq bol "InfoBegin")
+              (seq bol "InfoKey:")
+              (seq bol "InfoValue:")))
+     . font-lock-doc-face)
+    (,(rx (or (seq bol "PdfID" num ":")
+              (seq bol "NumberOfPages:")))
+     . font-lock-comment-delimiter-face)
+    (,(rx (or (seq bol "BookmarkBegin")
+              (seq bol "BookmarkTitle:")
+              (seq bol "BookmarkLevel:")
+              (seq bol "BookmarkPageNumber:")))
+     . font-lock-keyword-face)
+    (,(rx (or (seq bol "PageMediaBegin")
+              (seq bol "PageMediaNumber:")
+              (seq bol "PageMediaRotation:")
+              (seq bol "PageMediaRect:")
+              (seq bol "PageMediaDimensions:")))
+     . font-lock-type-face)
+    (,(rx (or (seq bol "PageLabelBegin")
+              (seq bol "PageLabelNewIndex:")
+              (seq bol "PageLabelStart:")
+              (seq bol "PageLabelNumStyle:")))
+     . font-lock-builtin-face))
+  "Syntax highlighting for `pdf-meta-edit-mode'.")
+
+;;;; Definition
 (define-derived-mode pdf-meta-edit-mode fundamental-mode "Metadata"
   "Major mode for altering and viewing PDF metadata."
   :interactive t
+  (setq font-lock-defaults (list pdf-meta-edit-mode-font-lock-keywords))
+  (add-hook 'pdf-meta-edit-mode-hook #'font-lock-mode)
   (use-local-map pdf-meta-edit-mode-map))
 
 ;;; Commands
