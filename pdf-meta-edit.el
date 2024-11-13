@@ -34,7 +34,6 @@
 ;;; Constants
 
 ;;; Functions
-
 ;;;###autoload
 (defun pdf-meta-edit-bookmark-section ()
   "Insert bookmark metadata section."
@@ -64,7 +63,6 @@
               "PageLabelNumStyle: " style))))
 
 ;;; Keymap
-
 (defvar-keymap pdf-meta-edit-mode-map
   :doc "Mode map for `pdf-meta-edit-mode'."
   "C-c C-b" #'pdf-meta-edit-bookmark-section
@@ -72,7 +70,6 @@
 
 ;;; Major mode
 ;;;; Font-locking
-
 (defvar pdf-meta-edit-mode-font-lock-keywords
   `((,(rx (or (seq bol "InfoBegin")
               (seq bol "InfoKey:")
@@ -108,7 +105,6 @@
   (use-local-map pdf-meta-edit-mode-map))
 
 ;;; Commands
-
 ;;;###autoload
 (defun pdf-meta-edit-modify (pdf-file)
   "Modify PDF-FILE metadata."
