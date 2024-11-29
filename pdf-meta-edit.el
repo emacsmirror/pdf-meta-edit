@@ -45,7 +45,9 @@ metadata of PDF-FILE."
   :doc "Mode map for `pdf-meta-edit-mode'."
   "C-c C-c" #'pdf-meta-edit-commit
   "C-c C-b" #'pdf-meta-edit-bookmark-section
-  "C-c C-l" #'pdf-meta-edit-label-section)
+  "C-c C-l" #'pdf-meta-edit-label-section
+  "M-n" #'pdf-meta-forward-subsection
+  "M-p" #'pdf-meta-backward-subsection)
 
 ;;; Major mode
 ;;;; Font-locking
@@ -153,6 +155,42 @@ metadata of PDF-FILE."
               "PageLabelStart: 1\n"
               "PageLabelNumStyle: " style))
     (move-end-of-line 3)))
+
+(defun pdf-meta-forward-subsection (&optional arg)
+  "Move to the next ARG metadata subsection.
+For instance, if the \"metadata subsection\" at point is a bookmark
+subsection (a line beginning with \"Bookmark\"), then move to the next
+line beginning with \"BookmarkBegin\"."
+  (interactive "p" pdf-meta-edit-mode)
+  (if (save-excursion
+        (end-of-line)
+        (search-forward-regexp
+         (rx line-start
+             (group (+ alpha)) ; Match the prefix
+             (or "Begin" (seq word-boundary (+ alpha) ":")))
+         nil :noerror (or arg 1)))
+      (progn
+        (goto-char (match-beginning 0))
+        (beginning-of-line))
+    (message "No next subsection")))
+
+(defun pdf-meta-edit-backward-subsection (&optional arg)
+  "Move to the previous ARG metadata subsection.
+For instance, if the \"metadata subsection\" at point is a bookmark
+subsection (a line beginning with \"Bookmark\"), then move to the last
+line beginning with \"BookmarkBegin\"."
+  (interactive "p" pdf-meta-edit-mode)
+  (if (save-excursion
+        (beginning-of-line)
+        (search-backward-regexp
+         (rx line-start
+             (group (+ alpha))
+             (or "Begin" (seq word-boundary (+ alpha) ":")))
+         nil :noerror (or arg 1)))
+      (progn
+        (goto-char (match-beginning 0))
+        (beginning-of-line))
+    (message "No previous subsection")))
 
 ;;; Provide
 (provide 'pdf-meta-edit)
