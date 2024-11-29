@@ -119,7 +119,6 @@
     (set-buffer-modified-p nil)
     (message (substitute-command-keys "Press `C-c C-c' when finished editing PDF metadata. To see keybinds, press \\[describe-mode]"))))
 
-;;;###autoload
 (defun pdf-meta-edit-bookmark-section ()
   "Insert bookmark metadata section."
   (interactive)
@@ -127,7 +126,6 @@
     (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
   (move-end-of-line 2))
 
-;;;###autoload
 (defun pdf-meta-edit-label-section ()
   "Insert bookmark metadata section."
   (interactive)
