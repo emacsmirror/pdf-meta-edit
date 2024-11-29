@@ -87,9 +87,9 @@
   (unless (executable-find "pdftk")
     (error "System executable `pdftk' not found. Please install executable on filesystem to proceed"))
   (let* ((pdf-name (file-name-sans-extension (file-name-nondirectory pdf-file)))
-         (buf-name (concat "*pdf-tools metadata: " pdf-name))
-         (metadata-file (concat "/tmp/pdf-tools-metadata--" pdf-name))
-         (temp-pdf (make-temp-file "/tmp/pdf-tools-metadata--temp-pdf"))
+         (buf-name (concat "*pdf-meta-edit: " pdf-name))
+         (metadata-file (concat "/tmp/pdf-meta-edit--" pdf-name))
+         (temp-pdf (make-temp-file "/tmp/pdf-meta-edit--temp-pdf"))
          (metadata-dump-command (concat "pdftk \"" pdf-file "\" dump_data"))
          (metadata-update-command
           (concat "pdftk \"" pdf-file "\" update_info \"" metadata-file "\" output \"" temp-pdf "\""))
@@ -103,7 +103,7 @@
                         (with-current-buffer buf-name
                           (widen)
                           (write-region (point-min) (point-max) metadata-file))
-                        (shell-command metadata-update-command "*pdf-tools metadata: CLI output")
+                        (shell-command metadata-update-command "*pdf-meta-edit: CLI output")
                         (kill-buffer buf-name)
                         ;; Have to do it this way since `pdftk' does not allow
                         ;; having the output file be the input file
