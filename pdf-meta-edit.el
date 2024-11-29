@@ -121,14 +121,14 @@
 
 (defun pdf-meta-edit-bookmark-section ()
   "Insert bookmark metadata section."
-  (interactive)
+  (interactive nil pdf-meta-edit-mode)
   (save-excursion
     (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
   (move-end-of-line 2))
 
 (defun pdf-meta-edit-label-section ()
   "Insert bookmark metadata section."
-  (interactive)
+  (interactive nil pdf-meta-edit-mode)
   (let* ((possible-styles
           '("DecimalArabicNumerals"
             "LowercaseRomanNumerals"
