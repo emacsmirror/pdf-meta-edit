@@ -47,7 +47,9 @@ metadata of PDF-FILE."
   "C-c C-b" #'pdf-meta-edit-bookmark-section
   "C-c C-l" #'pdf-meta-edit-label-section
   "M-n" #'pdf-meta-forward-subsection
-  "M-p" #'pdf-meta-backward-subsection)
+  "M-p" #'pdf-meta-backward-subsection
+  "M-}" #'pdf-meta-edit-forward-section
+  "M-{" #'pdf-meta-edit-backward-section)
 
 ;;; Major mode
 ;;;; Font-locking
@@ -159,6 +161,85 @@ metadata of PDF-FILE."
     (move-end-of-line 3)))
 
 ;;;; Movement
+(defun pdf-meta-edit-forward-section (&optional arg)
+  "Move to the next ARG metadata section.
+For instance, if the \"metadata section\" at point is a bookmark
+subsection (a line beginning with \"Bookmark\"), then move to the
+next line not beginning with \"Bookmark\".
+
+If ARG is negative, move backward ARG metadata sections."
+  (interactive "p" pdf-meta-edit-mode)
+  (if (< 0 arg)
+      (let (end-pt)
+        (save-excursion
+          (dotimes (_ (or arg 1))
+            (let ((regexp (concat "^"
+                                  (buffer-substring-no-properties (pos-bol)
+                                                                  (save-excursion (beginning-of-line)
+                                                                                  (forward-word)
+                                                                                  (point))))))
+              (while (and (not (eobp))      ; Avoid infinite loop
+                          (save-excursion
+                            (search-forward-regexp regexp
+                                                   (save-excursion
+                                                     (forward-line 1)
+                                                     (pos-eol))
+                                                   :noerror)))
+                (forward-line 1))
+              (setq end-pt (point)))))
+        (if (= end-pt (point-max))
+            (message "No next section")
+          (goto-char end-pt)
+          (beginning-of-line)))
+    (pdf-meta-edit-backward-section (- arg))))
+
+(defun pdf-meta-edit-backward-section (&optional arg)
+  "Move to the previous ARG metadata section.
+For instance, if the \"metadata section\" at point is a bookmark
+subsection (a line beginning with \"Bookmark\"), then move to the
+previous line not beginning with \"Bookmark\".
+
+If ARG is negative, move backward ARG metadata sections."
+  (interactive "p" pdf-meta-edit-mode)
+  (if (< 0 arg)
+      (if (= (pos-bol) (point-min))
+          (message "No previous section")
+        (let (end-pt)
+          (save-excursion
+            (dotimes (_ (or arg 1))
+              (let ((regexp (concat "^"
+                                    (buffer-substring-no-properties (pos-bol)
+                                                                    (save-excursion
+                                                                      (beginning-of-line)
+                                                                      (forward-word)
+                                                                      (point))))))
+                ;; Go to the end of the previous section
+                (while (and (not (bobp))      ; Avoid infinite loop
+                            (save-excursion
+                              (end-of-line)
+                              (search-backward-regexp regexp
+                                                      (save-excursion
+                                                        (forward-line -1)
+                                                        (pos-bol))
+                                                      :noerror)))
+                  (forward-line -1))
+                ;; Go to the beginning of this section (the previous section)
+                (let ((section-prefix
+                       (buffer-substring-no-properties (pos-bol)
+                                                       (save-excursion
+                                                         (beginning-of-line)
+                                                         (forward-word)
+                                                         (point)))))
+                  (while (and (not (bobp))
+                              (progn
+                                (forward-line -1)
+                                (beginning-of-line)
+                                (looking-at section-prefix)))))
+                (setq end-pt (point)))))
+          (goto-char end-pt)
+          (beginning-of-line)))
+    (pdf-meta-edit-forward-section (- arg))))
+
 (defun pdf-meta-forward-subsection (&optional arg)
   "Move to the next ARG metadata subsection.
 For instance, if the \"metadata subsection\" at point is a bookmark
