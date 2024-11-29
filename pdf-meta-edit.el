@@ -145,7 +145,8 @@
               "PageLabelBegin\n"
               "PageLabelNewIndex: 1\n"
               "PageLabelStart: 1\n"
-              "PageLabelNumStyle: " style))))
+              "PageLabelNumStyle: " style))
+    (move-end-of-line 3)))
 
 ;;; Provide
 (provide 'pdf-meta-edit)
