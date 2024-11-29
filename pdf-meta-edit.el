@@ -86,6 +86,7 @@ metadata of PDF-FILE."
   (use-local-map pdf-meta-edit-mode-map))
 
 ;;; Commands
+;;;; Entry-point
 ;;;###autoload
 (defun pdf-meta-edit-modify (pdf-file)
   "Modify PDF-FILE metadata."
@@ -110,6 +111,7 @@ metadata of PDF-FILE."
     (pop-to-buffer metadata-buf-name)
     (message (substitute-command-keys "Press \\[pdf-meta-edit-commit] when finished editing PDF metadata. To see other keybinds, press \\[describe-mode]"))))
 
+;;;; Subsection insertion
 (defun pdf-meta-edit-commit ()
   "Save metadata information in buffer to pdf file."
   (interactive nil pdf-meta-edit-mode)
@@ -156,6 +158,7 @@ metadata of PDF-FILE."
               "PageLabelNumStyle: " style))
     (move-end-of-line 3)))
 
+;;;; Movement
 (defun pdf-meta-forward-subsection (&optional arg)
   "Move to the next ARG metadata subsection.
 For instance, if the \"metadata subsection\" at point is a bookmark
