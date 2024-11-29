@@ -30,14 +30,20 @@
 ;;; Options
 
 ;;; Variables
-
-;;; Constants
+(defvar-local pdf-meta-edit-pdf-file nil
+  "The absolute file path of the current `pdf-meta-edit-mode' buffer.")
 
 ;;; Functions
+(defun pdf-meta-edit--buffer-name (pdf-file)
+  "Return buffer name corresponding to PDF-FILE.
+Returns a string that represents the buffer name used to edit the
+metadata of PDF-FILE."
+  (format "*pdf-meta-edit: %s*" (file-name-base pdf-file)))
 
 ;;; Keymap
 (defvar-keymap pdf-meta-edit-mode-map
   :doc "Mode map for `pdf-meta-edit-mode'."
+  "C-c C-c" #'pdf-meta-edit-commit
   "C-c C-b" #'pdf-meta-edit-bookmark-section
   "C-c C-l" #'pdf-meta-edit-label-section)
 
@@ -85,39 +91,41 @@
   (unless (string= "pdf" (file-name-extension pdf-file))
     (user-error "File is not a PDF!"))
   (unless (executable-find "pdftk")
-    (error "System executable `pdftk' not found. Please install executable on filesystem to proceed"))
-  (let* ((pdf-name (file-name-sans-extension (file-name-nondirectory pdf-file)))
-         (buf-name (concat "*pdf-meta-edit: " pdf-name))
-         (metadata-file (concat "/tmp/pdf-meta-edit--" pdf-name))
+    (error "System executable `pdftk' not found.  Please install executable on filesystem to proceed"))
+  (let* ((metadata-buf-name (pdf-meta-edit--buffer-name pdf-file))
+         (metadata-dump-command (format "pdftk \"%s\" dump_data" pdf-file))
+         (pdf-buffer (find-buffer-visiting pdf-file)))
+    ;; First we save the buffer visiting PDF-FILE in case it exists
+    (when pdf-buffer
+      (with-current-buffer pdf-buffer (save-buffer)))
+    (unless (get-buffer metadata-buf-name)
+      (with-current-buffer (get-buffer-create metadata-buf-name)
+        (insert (shell-command-to-string metadata-dump-command))
+        (set-buffer-modified-p nil)
+        (goto-char (point-min))
+        (pdf-meta-edit-mode)
+        (setq-local pdf-meta-edit-pdf-file (expand-file-name pdf-file))))
+    (pop-to-buffer metadata-buf-name)
+    (message (substitute-command-keys "Press \\[pdf-meta-edit-commit] when finished editing PDF metadata. To see other keybinds, press \\[describe-mode]"))))
+
+(defun pdf-meta-edit-commit ()
+  "Save metadata information in buffer to pdf file."
+  (interactive nil pdf-meta-edit-mode)
+  (let* ((pdf-name (file-name-base pdf-meta-edit-pdf-file))
+         (metadata-buf-name (pdf-meta-edit--buffer-name pdf-meta-edit-pdf-file))
+         (temp-metadata-file (concat "/tmp/pdf-meta-edit--" pdf-name))
          (temp-pdf (make-temp-file "/tmp/pdf-meta-edit--temp-pdf"))
-         (metadata-dump-command (concat "pdftk \"" pdf-file "\" dump_data"))
          (metadata-update-command
-          (concat "pdftk \"" pdf-file "\" update_info \"" metadata-file "\" output \"" temp-pdf "\""))
-         ;; TODO 2024-10-30: Make committing more robust by adding a named
-         ;; commit command to `pdf-meta-edit-mode-map' whose activity
-         ;; depends on a buffer-local value set here.  This makes the command
-         ;; work in e.g. major mode changes.
-         (commit-func (lambda ()
-                        "Commit the changes to PDF metadata."
-                        (interactive)
-                        (with-current-buffer buf-name
-                          (widen)
-                          (write-region (point-min) (point-max) metadata-file))
-                        (shell-command metadata-update-command "*pdf-meta-edit: CLI output")
-                        (kill-buffer buf-name)
-                        ;; Have to do it this way since `pdftk' does not allow
-                        ;; having the output file be the input file
-                        (rename-file temp-pdf pdf-file t)
-                        (message "Updated metadata!"))))
-    (save-buffer)
-    (with-current-buffer (get-buffer-create buf-name)
-      (insert (shell-command-to-string metadata-dump-command))
-      (goto-char (point-min))
-      (pdf-meta-edit-mode))
-    (pop-to-buffer buf-name)
-    (define-key pdf-meta-edit-mode-map (kbd "C-c C-c") commit-func)
-    (set-buffer-modified-p nil)
-    (message (substitute-command-keys "Press `C-c C-c' when finished editing PDF metadata. To see keybinds, press \\[describe-mode]"))))
+          (concat "pdftk \"" pdf-meta-edit-pdf-file "\" update_info \"" temp-metadata-file "\" output \"" temp-pdf "\"")))
+    (with-current-buffer metadata-buf-name
+      (widen)
+      (write-region (point-min) (point-max) temp-metadata-file))
+    (shell-command metadata-update-command "*pdf-meta-edit: CLI output*")
+    (kill-buffer metadata-buf-name)
+    ;; We must replace the pdf with temp-pdf because `pdftk' does not allow
+    ;; having the output file be the input file
+    (rename-file temp-pdf pdf-meta-edit-pdf-file t)
+    (message "Updated metadata!")))
 
 (defun pdf-meta-edit-bookmark-section ()
   "Insert bookmark metadata section."
