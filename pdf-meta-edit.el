@@ -34,33 +34,6 @@
 ;;; Constants
 
 ;;; Functions
-;;;###autoload
-(defun pdf-meta-edit-bookmark-section ()
-  "Insert bookmark metadata section."
-  (interactive)
-  (save-excursion
-    (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
-  (move-end-of-line 2))
-
-;;;###autoload
-(defun pdf-meta-edit-label-section ()
-  "Insert bookmark metadata section."
-  (interactive)
-  (let* ((possible-styles
-          '("DecimalArabicNumerals"
-            "LowercaseRomanNumerals"
-            "UppercaseRomanNumerals"
-            "UppercaseLetters"
-            "LowercaseLetters"
-            "NoNumber"))
-         (style
-          (completing-read "Label style: " possible-styles nil t)))
-    (save-excursion
-      (insert "\n"
-              "PageLabelBegin\n"
-              "PageLabelNewIndex: 1\n"
-              "PageLabelStart: 1\n"
-              "PageLabelNumStyle: " style))))
 
 ;;; Keymap
 (defvar-keymap pdf-meta-edit-mode-map
@@ -145,6 +118,34 @@
     (define-key pdf-meta-edit-mode-map (kbd "C-c C-c") commit-func)
     (set-buffer-modified-p nil)
     (message (substitute-command-keys "Press `C-c C-c' when finished editing PDF metadata. To see keybinds, press \\[describe-mode]"))))
+
+;;;###autoload
+(defun pdf-meta-edit-bookmark-section ()
+  "Insert bookmark metadata section."
+  (interactive)
+  (save-excursion
+    (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
+  (move-end-of-line 2))
+
+;;;###autoload
+(defun pdf-meta-edit-label-section ()
+  "Insert bookmark metadata section."
+  (interactive)
+  (let* ((possible-styles
+          '("DecimalArabicNumerals"
+            "LowercaseRomanNumerals"
+            "UppercaseRomanNumerals"
+            "UppercaseLetters"
+            "LowercaseLetters"
+            "NoNumber"))
+         (style
+          (completing-read "Label style: " possible-styles nil t)))
+    (save-excursion
+      (insert "\n"
+              "PageLabelBegin\n"
+              "PageLabelNewIndex: 1\n"
+              "PageLabelStart: 1\n"
+              "PageLabelNumStyle: " style))))
 
 ;;; Provide
 (provide 'pdf-meta-edit)
