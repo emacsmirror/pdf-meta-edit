@@ -147,7 +147,11 @@ metadata of PDF-FILE."
                                             (group (+ num))
                                             eol))
                  (match-string 2)))
-           "1")))
+           "1"))
+        reg-begin reg-end)
+    (pdf-meta-edit-forward-subsection)
+    (setq reg-begin (point))
+    (forward-line -1)
     (save-excursion
       (end-of-line)
       (insert "\n"
@@ -155,8 +159,10 @@ metadata of PDF-FILE."
               "BookmarkTitle: \n"
               "BookmarkLevel: "
               bookmark-level "\n"
-              "BookmarkPageNumber: "))
-    (move-end-of-line 2)))
+              "BookmarkPageNumber: ")
+      (setq reg-end (point)))
+    (move-end-of-line 2)
+    (pulse-momentary-highlight-region reg-begin reg-end)))
 
 (defun pdf-meta-edit-label-subsection ()
   "Insert bookmark metadata section."
@@ -169,15 +175,21 @@ metadata of PDF-FILE."
             "LowercaseLetters"
             "NoNumber"))
          (style
-          (completing-read "Label style: " possible-styles nil t)))
+          (completing-read "Label style: " possible-styles nil t))
+         reg-begin reg-end)
+    (pdf-meta-edit-forward-subsection)
+    (setq reg-begin (point))
+    (forward-line -1)
     (save-excursion
       (end-of-line)
       (insert "\n"
               "PageLabelBegin\n"
               "PageLabelNewIndex: 1\n"
               "PageLabelStart: 1\n"
-              "PageLabelNumStyle: " style))
-    (move-end-of-line 3)))
+              "PageLabelNumStyle: " style)
+      (setq reg-end (point)))
+    (move-end-of-line 3)
+    (pulse-momentary-highlight-region reg-begin reg-end)))
 
 ;;;; Movement
 (defun pdf-meta-edit-forward-section (&optional arg)
