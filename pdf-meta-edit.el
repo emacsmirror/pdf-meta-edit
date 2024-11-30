@@ -136,14 +136,27 @@ metadata of PDF-FILE."
 (defun pdf-meta-edit-bookmark-subsection ()
   "Insert bookmark metadata section."
   (interactive nil pdf-meta-edit-mode)
-  (save-excursion
-    (end-of-line)
-    (insert "\n"
-            "BookmarkBegin\n"
-            "BookmarkTitle: \n"
-            "BookmarkLevel: 1\n"
-            "BookmarkPageNumber: "))
-  (move-end-of-line 2))
+  (let ((bookmark-level
+         (if (save-excursion
+               (goto-char (pos-bol))
+               (looking-at "^Bookmark"))
+             (save-excursion
+               (save-match-data
+                 (search-backward-regexp "^BookmarkBegin")
+                 (search-forward-regexp (rx (group bol "BookmarkLevel:" (* whitespace))
+                                            (group (+ num))
+                                            eol))
+                 (match-string 2)))
+           "1")))
+    (save-excursion
+      (end-of-line)
+      (insert "\n"
+              "BookmarkBegin\n"
+              "BookmarkTitle: \n"
+              "BookmarkLevel: "
+              bookmark-level "\n"
+              "BookmarkPageNumber: "))
+    (move-end-of-line 2)))
 
 (defun pdf-meta-edit-label-subsection ()
   "Insert bookmark metadata section."
