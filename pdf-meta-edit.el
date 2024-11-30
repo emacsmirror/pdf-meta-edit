@@ -44,8 +44,8 @@ metadata of PDF-FILE."
 (defvar-keymap pdf-meta-edit-mode-map
   :doc "Mode map for `pdf-meta-edit-mode'."
   "C-c C-c" #'pdf-meta-edit-commit
-  "C-c C-b" #'pdf-meta-edit-bookmark-section
-  "C-c C-l" #'pdf-meta-edit-label-section
+  "C-c C-b" #'pdf-meta-edit-bookmark-subsection
+  "C-c C-l" #'pdf-meta-edit-label-subsection
   "M-n" #'pdf-meta-edit-forward-subsection
   "M-p" #'pdf-meta-edit-backward-subsection
   "M-}" #'pdf-meta-edit-forward-section
@@ -133,14 +133,14 @@ metadata of PDF-FILE."
     (rename-file temp-pdf pdf-meta-edit-pdf-file t)
     (message "Updated metadata!")))
 
-(defun pdf-meta-edit-bookmark-section ()
+(defun pdf-meta-edit-bookmark-subsection ()
   "Insert bookmark metadata section."
   (interactive nil pdf-meta-edit-mode)
   (save-excursion
     (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
   (move-end-of-line 2))
 
-(defun pdf-meta-edit-label-section ()
+(defun pdf-meta-edit-label-subsection ()
   "Insert bookmark metadata section."
   (interactive nil pdf-meta-edit-mode)
   (let* ((possible-styles
