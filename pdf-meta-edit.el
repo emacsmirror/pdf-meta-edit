@@ -137,7 +137,12 @@ metadata of PDF-FILE."
   "Insert bookmark metadata section."
   (interactive nil pdf-meta-edit-mode)
   (save-excursion
-    (insert "\nBookmarkBegin\nBookmarkTitle: \nBookmarkLevel: 1\nBookmarkPageNumber: "))
+    (end-of-line)
+    (insert "\n"
+            "BookmarkBegin\n"
+            "BookmarkTitle: \n"
+            "BookmarkLevel: 1\n"
+            "BookmarkPageNumber: "))
   (move-end-of-line 2))
 
 (defun pdf-meta-edit-label-subsection ()
@@ -153,6 +158,7 @@ metadata of PDF-FILE."
          (style
           (completing-read "Label style: " possible-styles nil t)))
     (save-excursion
+      (end-of-line)
       (insert "\n"
               "PageLabelBegin\n"
               "PageLabelNewIndex: 1\n"
