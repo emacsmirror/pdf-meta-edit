@@ -46,8 +46,8 @@ metadata of PDF-FILE."
   "C-c C-c" #'pdf-meta-edit-commit
   "C-c C-b" #'pdf-meta-edit-bookmark-section
   "C-c C-l" #'pdf-meta-edit-label-section
-  "M-n" #'pdf-meta-forward-subsection
-  "M-p" #'pdf-meta-backward-subsection
+  "M-n" #'pdf-meta-edit-forward-subsection
+  "M-p" #'pdf-meta-edit-backward-subsection
   "M-}" #'pdf-meta-edit-forward-section
   "M-{" #'pdf-meta-edit-backward-section)
 
@@ -240,7 +240,7 @@ If ARG is negative, move backward ARG metadata sections."
           (beginning-of-line)))
     (pdf-meta-edit-forward-section (- arg))))
 
-(defun pdf-meta-forward-subsection (&optional arg)
+(defun pdf-meta-edit-forward-subsection (&optional arg)
   "Move to the next ARG metadata subsection.
 For instance, if the \"metadata subsection\" at point is a bookmark
 subsection (a line beginning with \"Bookmark\"), then move to the next
