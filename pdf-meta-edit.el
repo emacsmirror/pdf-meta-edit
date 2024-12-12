@@ -123,13 +123,18 @@ metadata of PDF-FILE."
          (temp-pdf (make-temp-file "/tmp/pdf-meta-edit--temp-pdf"))
          (metadata-update-command
           (concat "pdftk \"" pdf-meta-edit-pdf-file "\" update_info \"" temp-metadata-file "\" output \"" temp-pdf "\"")))
+    (cond
+     ((not pdf-meta-edit-pdf-file)
+      (error "No buffer-local value for `pdf-meta-edit-pdf-file'!"))
+     ((not (file-exists-p pdf-meta-edit-pdf-file))
+      (error "Value of `pdf-meta-edit-pdf-file' does not point to existing PDF file!")))
     (with-current-buffer metadata-buf-name
       (widen)
       (write-region (point-min) (point-max) temp-metadata-file))
     (shell-command metadata-update-command "*pdf-meta-edit: CLI output*")
     (kill-buffer metadata-buf-name)
-    ;; We must replace the pdf with temp-pdf because `pdftk' does not allow
-    ;; having the output file be the input file
+    ;; We must replace the pdf with temp-pdf because pdftk does not allow having
+    ;; the output file be the input file
     (rename-file temp-pdf pdf-meta-edit-pdf-file t)
     (message "Updated metadata!")))
 
