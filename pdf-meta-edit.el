@@ -132,10 +132,10 @@ metadata of PDF-FILE."
       (widen)
       (write-region (point-min) (point-max) temp-metadata-file))
     (shell-command metadata-update-command "*pdf-meta-edit: CLI output*")
-    (kill-buffer metadata-buf-name)
     ;; We must replace the pdf with temp-pdf because pdftk does not allow having
     ;; the output file be the input file
     (rename-file temp-pdf pdf-meta-edit-pdf-file t)
+    (kill-buffer metadata-buf-name)
     (message "Updated metadata!")))
 
 (defun pdf-meta-edit-bookmark-subsection ()
