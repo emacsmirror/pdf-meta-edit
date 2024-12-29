@@ -1,8 +1,6 @@
 #+title: pdf-meta-edit
 
-Modify PDF metadata. PDF metadata includes the PDF outline, pagination (chronological and actual), and pagination style(s). =pdf-tools= offers powerful commands to navigate PDFs via chronological pagination (~pdf-view-goto-page~), actual pagination (i.e. "labels") (~pdf-view-goto-label~), and outline (~pdf-outline~, or =consult='s ~consult-imenu~). Hence, a PDF's metadata can become very handy---when accurate, at least.
-
-However, many PDFs can have missing or inconsistent metadata, such as having no outline nor labels (i.e. actual pagination). I hadn't found any existing package to do this (and still haven't), so I wrote a few lines of code to leverage Linux's =pdftk= binary. It creates a new buffer whose contents are the output of =pdftk='s representation of PDF metadata. Users can change the buffer contents to their liking then "commit" those changes to the actual file (using =pdftk=).
+Pdf-meta-edit allows for the quick-and-easy representation then modification of PDF metadata. PDF metadata includes the PDF title, bookmarks (i.e., outline), labels (document pagination), pagination style(s), and more within Emacs.
 
 An early and limited version of this code was first shared [[https://www.reddit.com/r/emacs/comments/1gbkdag/code_to_modify_pdf_metadata_such_as_its_outline/][on the r/emacs subreddit]] as a [[https://gist.github.com/krisbalintona/f4554bb8e53c27c246ae5e3c4ff9b342][GitHub gist]].
 
@@ -14,6 +12,37 @@ An early and limited version of this code was first shared [[https://www.reddit.
 + Add and modify metadata (bookmarks, labels, and page information)
   - Commands which make the addition and modification of metadata easier (see, e.g., ~pdf-meta-edit-bookmark-subsection~ and ~pdf-meta-edit-label-subsection~)
 + Navigation between metadata sections in ~pdf-meta-edit-mode~ buffers
+
+* Key terms and concepts
+
++ Bookmarks :: A bookmarks is a heading in the document; the totality of a PDF's bookmarks comprise the "document outline." For those familiar with documents compiled by LaTeX, every heading (part, chapter, section, etc.) of a LaTeX document creates a bookmark in the produced PDF. Bookmark metadata consists of the PDF page number it corresponds to, the level of the bookmark (e.g., level 2 headlines are one level down from the first level 1 preceding it), and the title/text of the bookmark.
++ Labels :: Labels refer to the pagination of the document. This is separate from the pagination of the /PDF/. For instance, a PDF might be 10 pages long, but the document pagination might begin on the third page and end on the second to last page. Labels may or may not be included in a PDF file.
++ Committing changes :: ~pdf-meta-edit-mode~ buffers are not written to disk. Any changes in these buffers are not reflected onto their corresponding PDF until =C-c C-c=, or ~M-x pdf-meta-edit-commit~, is pressed.
+
+For more information on the type of metadata represented by the underlying pdftk CLI tool that pdf-meta-edit uses and their possible fields and values, refer to the [[https://github.com/johnwhitington/cpdf-source/blob/master/cpdfmanual.pdf][cpdf manual, available on GitHub]].
+
+* Why use this package? Who is this package for?
+
+The author of this package regularly reads and navigates PDF files with [[https://github.com/vedang/pdf-tools][pdf-tools]]. pdf-tools offers powerful commands to navigate PDFs via document pagination (~pdf-view-goto-page~), PDF pagination (i.e., "labels"; ~pdf-view-goto-label~), and outline (i.e., bookmarks; ~pdf-outline~, or =consult='s ~consult-imenu~). However, these commands depend on PDF metadata, but many PDFs can have metadata inconsistent with their contents or have altogether missing metadata.
+
+As of 2024-12-29 the author is unaware of any other package[fn:1] that accomplishes what this package does. Namely, a flexible way to easily and quickly modify a given PDF's metadata.
+
+* Usage
+
+1. Open a PDF file (in any major mode).
+2. Call ~M-x pdf-meta-edit-modify~. This opens a ~pdf-meta-edit-mode~ buffer whose contents represent the metadata of that PDF file.
+3. Navigate the buffer with ~pdf-meta-edit-forward-section~, ~pdf-meta-edit-backward-section~, ~pdf-meta-edit-forward-subsection~, and ~pdf-meta-edit-backward-subsection~.
+4. Insert bookmark subsections (~pdf-meta-edit-bookmark-subsection~) and label subsections (~pdf-meta-edit-label-subsection~). These commands use ~completing-read~ to prompt for the values to these subsections' fields.
+5. Edit existing bookmark and label subsections.
+6. Commit the buffer's contents to the PDF file by pressing =C-c C-c=.
+
+** How does this package work?
+
+Pdf-meta-edit uses the [[https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/][pdftk]] CLI tool to represent the metadata of a PDF as plain-text then insert this metadata into a ~pdf-meta-edit-mode~ buffer. In this buffer, changes can be made to the text using any of Emacs' powerful text-editing capabilities. Additionally, pdf-meta-edit provides commands to more easily navigate between metadata sections and subsections as well as insert new subsections. (To view the commands available, press ~C-h m~ in a ~pdf-meta-edit-mode~ buffer or type ~C-h v pdf-meta-edit-mode-map RET~.)
+
+Once a user is happy with their changes and additions, the contents of the buffer can be committed by pressing =C-c C-c= or calling ~pdf-meta-edit-commit~ in the buffer.
+
+[fn:1] See also [[#related-packages][Related packages]].
 
 * Related packages
 
@@ -34,4 +63,5 @@ An early and limited version of this code was first shared [[https://www.reddit.
 + Added function to represent PDF metadata in plain-text, insert that text into an Emacs buffer, then the ability to "commit" changes made in that buffer to the PDF file itself (~pdf-meta-edit-modify~)
 + Added commands for inserting bookmarks (~pdf-meta-edit-bookmark-subsection~) and labels (~pdf-meta-edit-label-subsection~)
 + Added font-locking
-+ Added navigation between metadata sections and subections
++ Added navigation between metadata sections and subsections
+
