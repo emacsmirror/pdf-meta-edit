@@ -141,8 +141,8 @@ metadata of PDF-FILE."
   (interactive nil pdf-meta-edit-mode)
   (let* ((pdf-name (file-name-base pdf-meta-edit-pdf-file))
          (metadata-buf-name (pdf-meta-edit--buffer-name pdf-meta-edit-pdf-file))
-         (temp-metadata-file (concat "/tmp/pdf-meta-edit--" pdf-name))
-         (temp-pdf (make-temp-file "/tmp/pdf-meta-edit--temp-pdf"))
+         (temp-metadata-file (concat (temporary-file-directory) "pdf-meta-edit--" pdf-name))
+         (temp-pdf (make-temp-file (concat (temporary-file-directory) "pdf-meta-edit--temp-pdf")))
          (metadata-update-command
           (concat "pdftk \"" pdf-meta-edit-pdf-file "\" update_info \"" temp-metadata-file "\" output \"" temp-pdf "\"")))
     (cond
