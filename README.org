@@ -22,10 +22,10 @@ An early and limited version of this code was first shared [[https://www.reddit.
 * Roadmap
 
 + [X] Explicitly select parameters for labels
-+ [ ] Font-locking with more visual clarity
++ [X] Font-locking for added visual clarity
 + [ ] A "follow" mode between the bookmark or label at point and the pdf
 + [ ] Automatic generation of bookmarks based on table of contents page(s)
-+ [ ] Implementation of ~cpdf~ CLI tool
++ [ ] Equivalent implementation for the ~cpdf~ CLI tool
 
 * Changelog
 
