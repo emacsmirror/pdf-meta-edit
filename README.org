@@ -4,7 +4,26 @@ Pdf-meta-edit allows for the quick-and-easy representation then modification of 
 
 An early and limited version of this code was first shared [[https://www.reddit.com/r/emacs/comments/1gbkdag/code_to_modify_pdf_metadata_such_as_its_outline/][on the r/emacs subreddit]] as a [[https://gist.github.com/krisbalintona/f4554bb8e53c27c246ae5e3c4ff9b342][GitHub gist]].
 
+* Table of contents
+:PROPERTIES:
+:TOC:      :include all :force (nothing) :ignore (this) :local (nothing)
+:END:
+
+:CONTENTS:
+- [[#features][Features]]
+- [[#key-terms-and-concepts][Key terms and concepts]]
+- [[#why-use-this-package-who-is-this-package-for][Why use this package? Who is this package for?]]
+- [[#usage][Usage]]
+  - [[#how-does-this-package-work][How does this package work?]]
+- [[#related-packages][Related packages]]
+- [[#roadmap][Roadmap]]
+- [[#changelog][Changelog]]
+:END:
+
 * Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
 
 + Represent PDF bookmarks, labels, and page information as plain-text in Emacs buffers
 + "Commit" changes to pdf bookmarks, labels, and page information
@@ -14,6 +33,9 @@ An early and limited version of this code was first shared [[https://www.reddit.
 + Navigation between metadata sections in ~pdf-meta-edit-mode~ buffers
 
 * Key terms and concepts
+:PROPERTIES:
+:CUSTOM_ID: key-terms-and-concepts
+:END:
 
 + Bookmarks :: A bookmarks is a heading in the document; the totality of a PDF's bookmarks comprise the "document outline." For those familiar with documents compiled by LaTeX, every heading (part, chapter, section, etc.) of a LaTeX document creates a bookmark in the produced PDF. Bookmark metadata consists of the PDF page number it corresponds to, the level of the bookmark (e.g., level 2 headlines are one level down from the first level 1 preceding it), and the title/text of the bookmark.
 + Labels :: Labels refer to the pagination of the document. This is separate from the pagination of the /PDF/. For instance, a PDF might be 10 pages long, but the document pagination might begin on the third page and end on the second to last page. Labels may or may not be included in a PDF file.
@@ -22,12 +44,18 @@ An early and limited version of this code was first shared [[https://www.reddit.
 For more information on the type of metadata represented by the underlying pdftk CLI tool that pdf-meta-edit uses and their possible fields and values, refer to the [[https://github.com/johnwhitington/cpdf-source/blob/master/cpdfmanual.pdf][cpdf manual, available on GitHub]].
 
 * Why use this package? Who is this package for?
+:PROPERTIES:
+:CUSTOM_ID: why-use-this-package-who-is-this-package-for
+:END:
 
 The author of this package regularly reads and navigates PDF files with [[https://github.com/vedang/pdf-tools][pdf-tools]]. pdf-tools offers powerful commands to navigate PDFs via document pagination (~pdf-view-goto-page~), PDF pagination (i.e., "labels"; ~pdf-view-goto-label~), and outline (i.e., bookmarks; ~pdf-outline~, or =consult='s ~consult-imenu~). However, these commands depend on PDF metadata, but many PDFs can have metadata inconsistent with their contents or have altogether missing metadata.
 
 As of 2024-12-29 the author is unaware of any other package[fn:1] that accomplishes what this package does. Namely, a flexible way to easily and quickly modify a given PDF's metadata.
 
 * Usage
+:PROPERTIES:
+:CUSTOM_ID: usage
+:END:
 
 1. Open a PDF file (in any major mode).
 2. Call ~M-x pdf-meta-edit-modify~. This opens a ~pdf-meta-edit-mode~ buffer whose contents represent the metadata of that PDF file.
@@ -37,6 +65,10 @@ As of 2024-12-29 the author is unaware of any other package[fn:1] that accomplis
 6. Commit the buffer's contents to the PDF file by pressing =C-c C-c=.
 
 ** How does this package work?
+:PROPERTIES:
+:CUSTOM_ID: how-does-this-package-work
+:CREATED:  [2024-12-29 Sun 12:35]
+:END:
 
 Pdf-meta-edit uses the [[https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/][pdftk]] CLI tool to represent the metadata of a PDF as plain-text then insert this metadata into a ~pdf-meta-edit-mode~ buffer. In this buffer, changes can be made to the text using any of Emacs' powerful text-editing capabilities. Additionally, pdf-meta-edit provides commands to more easily navigate between metadata sections and subsections as well as insert new subsections. (To view the commands available, press ~C-h m~ in a ~pdf-meta-edit-mode~ buffer or type ~C-h v pdf-meta-edit-mode-map RET~.)
 
@@ -45,10 +77,16 @@ Once a user is happy with their changes and additions, the contents of the buffe
 [fn:1] See also [[#related-packages][Related packages]].
 
 * Related packages
+:PROPERTIES:
+:CUSTOM_ID: related-packages
+:END:
 
 + [[https://github.com/dalanicolai/doc-tools-toc][dalanicolai/doc-tools-toc]] :: A package which, among other things, provides commands that use external tools OCR, ~mutools~, and [[https://github.com/dalanicolai/doc-tools-toc?tab=readme-ov-file#pdf-tocgen-software-generated-pdfs][pdf-tocgen]] to extract table of contents text from PDFs.
 
 * Roadmap
+:PROPERTIES:
+:CUSTOM_ID: roadmap
+:END:
 
 + [X] Explicitly select parameters for labels
 + [X] Font-locking for added visual clarity
@@ -57,11 +95,25 @@ Once a user is happy with their changes and additions, the contents of the buffe
 + [ ] Equivalent implementation for the ~cpdf~ CLI tool
 
 * Changelog
+:PROPERTIES:
+:TOC:      :force (nothing) :ignore (descendants) :local (nothing)
+:CUSTOM_ID: changelog
+:END:
 
 ** 0.1.0
+:PROPERTIES:
+:CUSTOM_ID: 010
+:END:
 
 + Added function to represent PDF metadata in plain-text, insert that text into an Emacs buffer, then the ability to "commit" changes made in that buffer to the PDF file itself (~pdf-meta-edit-modify~)
 + Added commands for inserting bookmarks (~pdf-meta-edit-bookmark-subsection~) and labels (~pdf-meta-edit-label-subsection~)
 + Added font-locking
 + Added navigation between metadata sections and subsections
 
+* COMMENT Local variables :noexport:
+
+# Local Variables:
+# eval: (add-hook 'before-save-hook 'org-make-toc)
+# End:
+
+#  LocalWords:  PDF's toc pdftk
