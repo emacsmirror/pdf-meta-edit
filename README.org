@@ -104,6 +104,11 @@ Once a user is happy with their changes and additions, the contents of the buffe
 :CUSTOM_ID: changelog
 :END:
 
+** 0.2.0
+
++ Write full README
++ Update package commentary
+
 ** 0.1.0
 :PROPERTIES:
 :CUSTOM_ID: 010
