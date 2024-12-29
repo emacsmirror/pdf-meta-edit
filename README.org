@@ -37,9 +37,13 @@ An early and limited version of this code was first shared [[https://www.reddit.
 :CUSTOM_ID: key-terms-and-concepts
 :END:
 
-+ Bookmarks :: A bookmarks is a heading in the document; the totality of a PDF's bookmarks comprise the "document outline." For those familiar with documents compiled by LaTeX, every heading (part, chapter, section, etc.) of a LaTeX document creates a bookmark in the produced PDF. Bookmark metadata consists of the PDF page number it corresponds to, the level of the bookmark (e.g., level 2 headlines are one level down from the first level 1 preceding it), and the title/text of the bookmark.
-+ Labels :: Labels refer to the pagination of the document. This is separate from the pagination of the /PDF/. For instance, a PDF might be 10 pages long, but the document pagination might begin on the third page and end on the second to last page. Labels may or may not be included in a PDF file.
-+ Committing changes :: ~pdf-meta-edit-mode~ buffers are not written to disk. Any changes in these buffers are not reflected onto their corresponding PDF until =C-c C-c=, or ~M-x pdf-meta-edit-commit~, is pressed.
++ Bookmarks :: A bookmarks is a heading in the document; the totality of a PDF's bookmarks comprise the "document outline." For those familiar with documents compiled by LaTeX, every heading (part, chapter, section, etc.) of a LaTeX document creates a bookmark in the produced PDF.
+
+  Bookmark metadata consists of the PDF page number it corresponds to, the level of the bookmark (e.g., level 2 headlines are one level down from the first level 1 preceding it), and the title/text of the bookmark.
++ Labels :: Labels refer to the pagination of the /document/. This is separate from /the pagination of the PDF/. For instance, a PDF might be 10 pages long, but the document pagination might begin on the third page and end on the second to last page.
+
+  Labels may or may not be included in a PDF file.
++ Committing changes :: ~pdf-meta-edit-mode~ buffers are not saved to disk; they are buffers not visiting files. Any changes in these buffers are not reflected onto their corresponding PDF until =C-c C-c= pressed, or ~M-x pdf-meta-edit-commit~ is called.
 
 For more information on the type of metadata represented by the underlying pdftk CLI tool that pdf-meta-edit uses and their possible fields and values, refer to the [[https://github.com/johnwhitington/cpdf-source/blob/master/cpdfmanual.pdf][cpdf manual, available on GitHub]].
 
