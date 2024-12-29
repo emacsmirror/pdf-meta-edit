@@ -6,14 +6,18 @@ However, many PDFs can have missing or inconsistent metadata, such as having no 
 
 An early and limited version of this code was first shared [[https://www.reddit.com/r/emacs/comments/1gbkdag/code_to_modify_pdf_metadata_such_as_its_outline/][on the r/emacs subreddit]] as a [[https://gist.github.com/krisbalintona/f4554bb8e53c27c246ae5e3c4ff9b342][GitHub gist]].
 
-
 * Features
 
-+ List text-representation of pdf bookmarks, labels, and page information
++ Represent PDF bookmarks, labels, and page information as plain-text in Emacs buffers
 + "Commit" changes to pdf bookmarks, labels, and page information
-+ Command to add bookmarks
-+ Command to add labels
-+ Basic font-locking
++ Basic font-locking (in ~pdf-meta-edit-mode~ buffers)
++ Add and modify metadata (bookmarks, labels, and page information)
+  - Commands which make the addition and modification of metadata easier (see, e.g., ~pdf-meta-edit-bookmark-subsection~ and ~pdf-meta-edit-label-subsection~)
++ Navigation between metadata sections in ~pdf-meta-edit-mode~ buffers
+
+* Related packages
+
++ [[https://github.com/dalanicolai/doc-tools-toc][dalanicolai/doc-tools-toc]] :: A package which, among other things, provides commands that use external tools OCR, ~mutools~, and [[https://github.com/dalanicolai/doc-tools-toc?tab=readme-ov-file#pdf-tocgen-software-generated-pdfs][pdf-tocgen]] to extract table of contents text from PDFs.
 
 * Roadmap
 
