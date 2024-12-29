@@ -1,4 +1,4 @@
-;;; pdf-meta-edit.el --- Editing PDFs' metadata      -*- lexical-binding: t; -*-
+;;; pdf-meta-edit.el --- Edit PDF metadata -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2024  Kristoffer Balintona
 
