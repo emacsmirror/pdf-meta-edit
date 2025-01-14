@@ -1,5 +1,8 @@
 #+title: pdf-meta-edit
 
+# MELPA badge
+#+HTML: <a href="https://melpa.org/#/pdf-meta-edit"><img alt="MELPA" src="https://melpa.org/packages/pdf-meta-edit-badge.svg"/></a>
+
 Pdf-meta-edit allows for the quick-and-easy representation then modification of PDF metadata. PDF metadata includes the PDF title, bookmarks (i.e., outline), labels (document pagination), pagination style(s), and more within Emacs.
 
 An early and limited version of this code was first shared [[https://www.reddit.com/r/emacs/comments/1gbkdag/code_to_modify_pdf_metadata_such_as_its_outline/][on the r/emacs subreddit]] as a [[https://gist.github.com/krisbalintona/f4554bb8e53c27c246ae5e3c4ff9b342][GitHub gist]].
