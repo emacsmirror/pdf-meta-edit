@@ -18,6 +18,7 @@ An early and limited version of this code was first shared [[https://www.reddit.
 - [[#why-use-this-package-who-is-this-package-for][Why use this package? Who is this package for?]]
 - [[#usage][Usage]]
   - [[#how-does-this-package-work][How does this package work?]]
+  - [[#installing-the-correct-pdftk-binary][Installing the correct pdftk binary]]
 - [[#related-packages][Related packages]]
 - [[#roadmap][Roadmap]]
 - [[#changelog][Changelog]]
@@ -82,6 +83,19 @@ Pdf-meta-edit uses the [[https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/][p
 Once a user is happy with their changes and additions, the contents of the buffer can be committed by pressing =C-c C-c= or calling ~pdf-meta-edit-commit~ in the buffer.
 
 [fn:1] See also [[#related-packages][Related packages]].
+
+** Installing the correct =pdftk= binary
+:PROPERTIES:
+:CUSTOM_ID: installing-the-correct-pdftk-binary
+:END:
+
+As discussed on [[https://github.com/krisbalintona/pdf-meta-edit/issues/1][issue #1]] and [[https://unix.stackexchange.com/questions/611199/pdftk-does-not-update-pagelabel-metadata][here]], some packaged versions of the pdftk binary may not possess functionality this package depends on. Depending on your operating system and distribution, you may need to directly download and use [[https://gitlab.com/pdftk-java/pdftk][pdftk-java a fork of the standard pdftk version]].
+
+Users who opt to download the pdftk-java jar file can tell pdf-meta-edit to use that jar file via setting the ~pdf-meta-edit-command~ option appropriately, like so:
+#+begin_src emacs-lisp
+  (setopt pdf-meta-edit-command "java -jar \"_JAR_FILE_LOCATION_\" \"")
+#+end_src
+where ~_JAR_FILE_LOCATION_~ is the path to the pdftk jar file.
 
 * Related packages
 :PROPERTIES:

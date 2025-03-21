@@ -56,7 +56,11 @@
   :prefix "pdf-meta-edit-")
 
 (defcustom pdf-meta-edit-command (executable-find "pdftk")
-  "String pass to shell to call the pdftk binary."
+  "String passed to the shell to call the pdftk.
+Users should be aware that some versions of the pdftk binary do not
+support updating page labels.  If this applies to you, please read the
+package README (found at https://github.com/krisbalintona/pdf-meta-edit)
+for more information on how to acquire the requisite pdftk binary."
   :type 'string)
 
 ;;; Variables
