@@ -50,6 +50,14 @@
 ;;; Code:
 
 ;;; Options
+(defgroup pdf-meta-edit ()
+  "Interface for editing PDF metadata via pdftk."
+  :group 'files
+  :prefix "pdf-meta-edit-")
+
+(defcustom pdf-meta-edit-command (executable-find "pdftk")
+  "String pass to shell to call the pdftk binary."
+  :type 'string)
 
 ;;; Variables
 (defvar-local pdf-meta-edit-pdf-file nil
@@ -117,8 +125,8 @@ metadata of PDF-FILE."
   (interactive (list (buffer-file-name)))
   (unless (string= "pdf" (file-name-extension pdf-file))
     (user-error "File is not a PDF!"))
-  (unless (executable-find "pdftk")
-    (error "System executable `pdftk' not found.  Please install executable on filesystem to proceed"))
+  (unless pdf-meta-edit-command
+    (error "Please ensure the system executable `pdftk' is installed and specified by the `pdf-meta-edit-command' option"))
   (let* ((metadata-buf-name (pdf-meta-edit--buffer-name pdf-file))
          (metadata-dump-command (format "pdftk \"%s\" dump_data" pdf-file))
          (pdf-buffer (find-buffer-visiting pdf-file)))
@@ -144,7 +152,7 @@ metadata of PDF-FILE."
          (temp-metadata-file (concat (temporary-file-directory) "pdf-meta-edit--" pdf-name))
          (temp-pdf (make-temp-file (concat (temporary-file-directory) "pdf-meta-edit--temp-pdf")))
          (metadata-update-command
-          (concat "pdftk \"" pdf-meta-edit-pdf-file "\" update_info \"" temp-metadata-file "\" output \"" temp-pdf "\"")))
+          (concat pdf-meta-edit-command " \"" pdf-meta-edit-pdf-file "\" update_info \"" temp-metadata-file "\" output \"" temp-pdf "\"")))
     (cond
      ((not pdf-meta-edit-pdf-file)
       (error "No buffer-local value for `pdf-meta-edit-pdf-file'!"))
