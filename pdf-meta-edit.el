@@ -132,7 +132,7 @@ metadata of PDF-FILE."
   (unless pdf-meta-edit-command
     (error "Please ensure the system executable `pdftk' is installed and specified by the `pdf-meta-edit-command' option"))
   (let* ((metadata-buf-name (pdf-meta-edit--buffer-name pdf-file))
-         (metadata-dump-command (format "pdftk \"%s\" dump_data" pdf-file))
+         (metadata-dump-command (concat pdf-meta-edit-command " \"" pdf-file "\" dump_data"))
          (pdf-buffer (find-buffer-visiting pdf-file)))
     ;; First we save the buffer visiting PDF-FILE in case it exists
     (when pdf-buffer
