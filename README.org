@@ -121,6 +121,11 @@ where ~_JAR_FILE_LOCATION_~ is the path to the pdftk jar file.
 :CUSTOM_ID: changelog
 :END:
 
+** 0.2.2
+
++ Add user-option ~pdf-meta-edit-command~
++ Also fontify "PageLabelPrefix"
+
 ** 0.2.1
 
 + Add to MELPA
