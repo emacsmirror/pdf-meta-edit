@@ -109,6 +109,7 @@ metadata of PDF-FILE."
     (,(rx (or (seq bol "PageLabelBegin")
               (seq bol "PageLabelNewIndex:")
               (seq bol "PageLabelStart:")
+              (seq bol "PageLabelPrefix:")
               (seq bol "PageLabelNumStyle:")))
      . font-lock-builtin-face))
   "Syntax highlighting for `pdf-meta-edit-mode'.")
