@@ -103,6 +103,7 @@ where ~_JAR_FILE_LOCATION_~ is the path to the pdftk jar file.
 :END:
 
 + [[https://github.com/dalanicolai/doc-tools-toc][dalanicolai/doc-tools-toc]] :: A package which, among other things, provides commands that use external tools OCR, ~mutools~, and [[https://github.com/dalanicolai/doc-tools-toc?tab=readme-ov-file#pdf-tocgen-software-generated-pdfs][pdf-tocgen]] to extract table of contents text from PDFs.
++ [[https://github.com/emacsomancer/pdffontetc][emacsomancer/pdffontetc]] :: Show information about PDFs and their metadata.
 
 * Roadmap
 :PROPERTIES:
